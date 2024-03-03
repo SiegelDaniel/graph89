@@ -117,7 +117,6 @@ public class EmulatorActivity extends Graph89ActivityBase
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.emulator_main);
 		BackwardCompatibility.RunPatches(this);
-		checkPermissions();
 		InitMembers();
 	/*	
 		try
@@ -183,24 +182,6 @@ public class EmulatorActivity extends Graph89ActivityBase
 		}
 	}
 
-	public void checkPermissions() {
-		if (android.os.Build.VERSION.SDK_INT >= 23) {
-			if (!PermissionHelper.isMediaPermissionsGranted(this)) {
-				PermissionHelper.requestMediaPermissions(this, PermissionHelper.MEDIA_PERMISSIONS_REQUEST);
-			}
-		}
-	}
-
-	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-		if (requestCode == PermissionHelper.MEDIA_PERMISSIONS_REQUEST) {
-			for (int i = 0; i < permissions.length; i++) {
-				if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-					Toast.makeText(this, "Required storage permission not granted", Toast.LENGTH_LONG).show();
-					finish();
-				}
-			}
-		}
-	}
 
 	private void unbindDrawables(View view)
 	{
@@ -507,7 +488,7 @@ public class EmulatorActivity extends Graph89ActivityBase
 					vibratorService.vibrate(hapticFeedback);
 				}
 				if (audioManager != null && audioFeedback) {
-					audioManager.playSoundEffect(SoundEffectConstants.CLICK,1.0f);
+					audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK,1.0f);
 				}
 			}
 
@@ -781,6 +762,7 @@ public class EmulatorActivity extends Graph89ActivityBase
 				HideProgressDialog();
 				break;
 			case EmulatorActivity.HANDLER_TERMINATE:
+				Toast.makeText(this,"Kaputt", Toast.LENGTH_LONG);
 				Terminate();
 				break;				
 		}
